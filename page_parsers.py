@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from retailers import retailer_urls
 
 # Add a timer between requests, so the websites don't forcibly close our connection
-TIMER = 10 # seconds
+TIMER = 2 # seconds
 def wait_between_requests(r, *args, **kwargs):
     sleep(TIMER)
 
