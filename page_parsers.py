@@ -223,12 +223,13 @@ def origo_parser(category_id, retailer, baseurl, items):
     page_number = 0
     while (page_number < 10):
         page_number += 1
-        data = {
-            'action': 1,
-            'page': page_number,
-            'id': category_id,
+        body = {
+            "action": "1",
+            "id": str(category_id),
+            "manus": [],
+            "page": 1
         }
-        response = request_session.post('https://verslun.origo.is/FetchProducts', verify=False, data=data)
+        response = request_session.post('https://verslun.origo.is/FetchProducts', json=body)
         products = response.json().get('currentProducts')
         if (len(products) == 0):
             break
@@ -247,12 +248,13 @@ def tolvutek_parser(category_id, retailer, baseurl, items):
     page_number = 0
     while (page_number < 10):
         page_number += 1
-        data = {
+        body = {
             'action': 1,
             'page': page_number,
-            'id': category_id,
+            'manus': [],
+            'id': str(category_id),
         }
-        response = request_session.post('https://tolvutek.is/FetchProducts', verify=False, data=data)
+        response = request_session.post('https://tolvutek.is/FetchProducts', verify=False, json=body)
         products = response.json().get('currentProducts')
         if (len(products) == 0):
             break
