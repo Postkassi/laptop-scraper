@@ -1,7 +1,7 @@
 from retailers import retailer_urls
 from page_parsers import extract_items_from_url
 
-from serverV1 import upload_to_server
+from server import upload_to_server
 
 
 items = []
