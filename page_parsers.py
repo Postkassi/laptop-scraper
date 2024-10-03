@@ -20,6 +20,8 @@ def extract_items_from_url(url, retailer):
 
     if (retailer == 'advania'):
         return advania_parser(url, retailer, baseurl, items)
+    elif (retailer == 'tolvutek'):
+         return tolvutek_parser(url, retailer, baseurl, items)
     elif (retailer == 'computer'):
          return computer_parser(url, retailer, baseurl, items)
     elif (retailer == 'elko'):
@@ -34,8 +36,6 @@ def extract_items_from_url(url, retailer):
          return origo_parser(url, retailer, baseurl, items)
     elif (retailer == 'tolvulistinn'):
          return tolvulistinn_parser(url, retailer, baseurl, items)
-    elif (retailer == 'tolvutek'):
-         return tolvutek_parser(url, retailer, baseurl, items)
     return items
 
 
@@ -74,33 +74,12 @@ def advania_parser(url, retailer, baseurl, items):
         print(items[-1])
     return items
 
-def advania_parser(url, retailer, baseurl, items):
-    page = request_session.get(url)
-    soup = BeautifulSoup(page.text, 'html5lib')
-    products = soup.find_all('div', class_='productBoxContainer')
-
-    for product in products:
-        info = product.find('div', class_='info-wrapper')
-        sku = get_stripped_text(info.find('p', class_='productNumber'))
-        name = get_stripped_text(info.find('p', class_='title'))
-        price = strip_number(product.find('span', class_='priceAmount').get_text())
-        product_url = baseurl + product.find('a').get('href')
-        items.append(build_component(retailer, product_url, name, sku, price))
-        print(items[-1])
-    return items
-
 def tolvutek_parser(category_id, retailer, baseurl, items):
     page_number = 0
     while (page_number < 10):
         page_number += 1
-        # body = {
-        #     'action': 1,
-        #     'page': page_number,
-        #     'manus': [],
-        #     'id': str(category_id),
-        # }
-        response = request_session.post('https://tolvutek.is/api/FetchProducts?categoryId=847', verify=False)
-        #response = request_session.post('https://tolvutek.is/FetchProducts', verify=False, json=body)
+        response = request_session.post('https://tolvutek.is/api/FetchProducts?categoryId=847', verify=True)
+
         products = response.json().get('currentProducts')
         if (len(products) == 0):
             break
@@ -114,35 +93,6 @@ def tolvutek_parser(category_id, retailer, baseurl, items):
             items.append(build_component(retailer, product_url, name, sku, price))
             print(items[-1])
     return items
-
-# def elko_parser(url, retailer, baseurl, items):
-#     pages = 1000
-#     page_number = 1
-#     products = []
-#     loops = 0
-
-#     # while (page_number <= pages and loops < 10):
-#     #     page_url = '%s?p=%s' % (url, page_number,)
-#     #     page = request_session.get(page_url)
-#     #     soup = BeautifulSoup(page.text, 'html5lib')
-#     #     if pages == 1000:
-#     #         try:
-#     #             pages = strip_number(soup.find_all('', class_='page-item')[-2].get_text())
-#     #         except:
-#     #             pages = 1
-#     #     print('page-url', page_url)
-#     #     products = products + soup.find_all('div', class_='product-item-info')
-#     #     page_number += 1
-#     #     loops += 1
-
-#     for product in products:
-#         name = get_stripped_text(product.find('h4', class_='product-name'))
-#         price = strip_number(product.find('span', class_='price-tag').get_text())
-#         product_url = product.find('a', class_='price-button').get('href')
-#         sku = get_stripped_text(product.find('div', class_='product-code'))
-#         items.append(build_component(retailer, product_url, name, sku, price))
-#         print(items[-1])
-#     return items
 
 def elko_parser(url, retailer, baseurl, items):
     page = 1

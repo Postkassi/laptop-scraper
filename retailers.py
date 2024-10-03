@@ -3,6 +3,10 @@ retailer_urls = {
         'baseurl': 'https://vefverslun.advania.is',
         'urls': ('https://vefverslun.advania.is/voruflokkar/fartolvur?ProductID=&feed=true&PageNum=1&PageSize=',)
     },
+        'tolvutek': {
+        'baseurl': 'https://tolvutek.is',
+        'urls': (847,)
+    },
      'computer': { 
          'baseurl': 'https://computer.is',
          'urls': (
@@ -41,10 +45,6 @@ retailer_urls = {
     'tolvulistinn': {
         'baseurl': 'https://tl.is',
         'urls': ('https://tl.is/fartolvur/allar-staer-ir.html',),
-    },
-    'tolvutek': {
-        'baseurl': 'https://tolvutek.is',
-        'urls': (847,)
     },
     'epli': { 
         'baseurl': 'https://epli.is',
