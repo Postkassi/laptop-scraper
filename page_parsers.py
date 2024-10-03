@@ -18,25 +18,25 @@ def extract_items_from_url(url, retailer):
     items = []
     baseurl = retailer_urls.get(retailer).get('baseurl')
 
-    #if (retailer == 'advania'):
-    #    return advania_parser(url, retailer, baseurl, items)
-    # elif (retailer == 'computer'):
-    #     return computer_parser(url, retailer, baseurl, items)
-    if (retailer == 'elko'):
+    if (retailer == 'advania'):
+        return advania_parser(url, retailer, baseurl, items)
+    elif (retailer == 'computer'):
+         return computer_parser(url, retailer, baseurl, items)
+    elif (retailer == 'elko'):
          return elko_parser(url, retailer, baseurl, items)
-    # elif (retailer == 'kisildalur'):
-    #     return kisildalur_parser(url, retailer, baseurl, items)
-    # elif (retailer == 'macland'):
-    #     return macland_parser(url, retailer, baseurl, items)
-    # elif (retailer == 'opinkerfi'):
-    #     return opinkerfi_parser(url, retailer, baseurl, items)
-    # elif (retailer == 'origo'):
-    #     return origo_parser(url, retailer, baseurl, items)
-    # elif (retailer == 'tolvulistinn'):
-    #     return tolvulistinn_parser(url, retailer, baseurl, items)
-    # elif (retailer == 'tolvutek'):
-    #     return tolvutek_parser(url, retailer, baseurl, items)
-    # return items
+    elif (retailer == 'kisildalur'):
+         return kisildalur_parser(url, retailer, baseurl, items)
+    elif (retailer == 'macland'):
+         return macland_parser(url, retailer, baseurl, items)
+    elif (retailer == 'opinkerfi'):
+         return opinkerfi_parser(url, retailer, baseurl, items)
+    elif (retailer == 'origo'):
+         return origo_parser(url, retailer, baseurl, items)
+    elif (retailer == 'tolvulistinn'):
+         return tolvulistinn_parser(url, retailer, baseurl, items)
+    elif (retailer == 'tolvutek'):
+         return tolvutek_parser(url, retailer, baseurl, items)
+    return items
 
 
 def strip_number(number_string):
@@ -55,44 +55,44 @@ def build_component(retailer, url, name, sku, price):
 def get_stripped_text(soup):
     return soup.get_text().strip()
 
-# def advania_parser(url, retailer, baseurl, items):
-#     response = request_session.post(url)
-#     data = response.json()  # Parse the JSON response
+def advania_parser(url, retailer, baseurl, items):
+    response = request_session.post(url)
+    data = response.json()  # Parse the JSON response
 
-#     products = data.get('products', [])  # Adjust this based on the actual JSON structure
+    products = data.get('products', [])  # Adjust this based on the actual JSON structure
 
-#     for product in products:
-#         price_info = product.get('price', {})
-#         discount_price_info = product.get('discount', {})
-#         standard_price = price_info.get('priceWithVat')  # Get the first "price" value
-#         special_price = discount_price_info.get('priceWithVat')
-#         name = product.get('name')
-#         sku = product.get('number')
-#         price = round(special_price if special_price != 0 else standard_price)
-#         product_url = '%s/SelectProd.action?prodId=%s' % (baseurl, product.get('id'))
-#         items.append(build_component(retailer, product_url, name, sku, price))
-#         print(items[-1])
-#     return items
+    for product in products:
+        price_info = product.get('price', {})
+        discount_price_info = product.get('discount', {})
+        standard_price = price_info.get('priceWithVat')  # Get the first "price" value
+        special_price = discount_price_info.get('priceWithVat')
+        name = product.get('name')
+        sku = product.get('number')
+        price = round(special_price if special_price != 0 else standard_price)
+        product_url = '%s/SelectProd.action?prodId=%s' % (baseurl, product.get('id'))
+        items.append(build_component(retailer, product_url, name, sku, price))
+        print(items[-1])
+    return items
 
-# def advania_parser(url, retailer, baseurl, items):
-#     page = request_session.get(url)
-#     soup = BeautifulSoup(page.text, 'html5lib')
-#     products = soup.find_all('div', class_='productBoxContainer')
+def advania_parser(url, retailer, baseurl, items):
+    page = request_session.get(url)
+    soup = BeautifulSoup(page.text, 'html5lib')
+    products = soup.find_all('div', class_='productBoxContainer')
 
-    # for product in products:
-    #     info = product.find('div', class_='info-wrapper')
-    #     sku = get_stripped_text(info.find('p', class_='productNumber'))
-    #     name = get_stripped_text(info.find('p', class_='title'))
-    #     price = strip_number(product.find('span', class_='priceAmount').get_text())
-    #     product_url = baseurl + product.find('a').get('href')
-    #     items.append(build_component(retailer, product_url, name, sku, price))
-    #     print(items[-1])
-    # return items
+    for product in products:
+        info = product.find('div', class_='info-wrapper')
+        sku = get_stripped_text(info.find('p', class_='productNumber'))
+        name = get_stripped_text(info.find('p', class_='title'))
+        price = strip_number(product.find('span', class_='priceAmount').get_text())
+        product_url = baseurl + product.find('a').get('href')
+        items.append(build_component(retailer, product_url, name, sku, price))
+        print(items[-1])
+    return items
 
-# def tolvutek_parser(category_id, retailer, baseurl, items):
-#     page_number = 0
-#     while (page_number < 10):
-#         page_number += 1
+def tolvutek_parser(category_id, retailer, baseurl, items):
+    page_number = 0
+    while (page_number < 10):
+        page_number += 1
 #         # body = {
 #         #     'action': 1,
 #         #     'page': page_number,
