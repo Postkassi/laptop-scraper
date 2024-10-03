@@ -40,7 +40,7 @@ def extract_items_from_url(url, retailer):
 
 
 def strip_number(number_string):
-    return int(re.sub('\D', '', number_string))
+    return int(re.sub(r'\D', '', number_string))
 
 
 def build_component(retailer, url, name, sku, price):
