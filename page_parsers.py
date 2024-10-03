@@ -265,10 +265,20 @@ def origo_parser(category_id, retailer, baseurl, items):
             "action": "1",
             "id": str(category_id),
             "manus": [],
-            "page": 1
-        }
-        response = request_session.post('https://api-verslun.origo.is/FetchProducts', json=body)
-        products = response.json().get('currentProducts')
+            "page": 1,
+            "pageSize": 200                                                                              
+        }                                                                                                 
+        response = request_session.post('https://api-verslun.origo.is/FetchProducts?categoryId=847', json=body)
+        # Check if the response is successful
+        if response.status_code != 200:                                            
+            print(f"Failed to fetch products: {response.status_code}")
+            break                          
+        try:                                         
+            products = response.json().get('currentProducts')  
+        except requests.exceptions.JSONDecodeError as e:                                                    
+            print(f"JSON decode error: {e}")                                                                     
+            print(f"Response text: {response.text}")                                             
+            break
         if (len(products) == 0):
             break
         for product in products:
@@ -276,7 +286,14 @@ def origo_parser(category_id, retailer, baseurl, items):
             special_price = product.get('specialPriceIncTax')
             name = product.get('name')
             sku = product.get('sku')
-            price = round(special_price if special_price is not None else standard_price)
+            # Ensure price is not None before rounding
+            if special_price is not None:
+                price = round(special_price)
+            elif standard_price is not None:
+                price = round(standard_price)
+            else:
+                price = None  # or handle this case as needed
+            
             product_url = '%s/SelectProd.action?prodId=%s' % (baseurl, product.get('id'))
             items.append(build_component(retailer, product_url, name, sku, price))
             print(items[-1])
